@@ -457,13 +457,13 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     float[] float_array_debug = new float[2];
                     String string_debug = new String();
                     String string_concat_debug = new String();
-                    for(int j = 0; j < 4; j++){
+                    for(int j = 0; j < 8; j++){
                         int_array_debug[0] = mByteBuffer.getInt(j*20);
                         int_array_debug[1] = mByteBuffer.getInt(j*20 + 4 );
                         int_array_debug[2] = mByteBuffer.getInt(j*20 + 8);
                         float_array_debug[0] = mByteBuffer.getFloat(j*20 + 12);
                         float_array_debug[1] = mByteBuffer.getFloat(j*20 + 16);
-                        if(j == 3){
+                        if(j == 7){
                             string_debug = Arrays.toString(int_array_debug)+ ", " + Arrays.toString(float_array_debug);
                             string_concat_debug += "[" + string_debug.replace("[", "").replace("]", "") + "]";
                         }else{
@@ -471,6 +471,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                             string_concat_debug += "[" + string_debug.replace("[", "").replace("]", "") + "]" + "\n";
                         }
                     }
+                    //Log.e("MOTION SERVICE FRAGMENT", "COMMAND ANSWER DATA RECEIVED " + string_concat_debug);
                     mTestView.setTextSize(15);
                     mTestView.setText(string_concat_debug);
                     break;
@@ -541,10 +542,10 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     for(int i=0; i<answer.length/4; i++){
                         float_array_tare[i] = mByteBuffer.getFloat(i*4);
                     }
-                    mTestView.setTextSize(20);
+                    mTestView.setTextSize(15);
                     mTestView.setText(Arrays.toString(float_array_tare));
                     break;
-                case "RCALW":
+                case "RCAL":
                     float[] float_array_calw = new float[(answer.length/4)];
                     for(int i=0; i<answer.length/4; i++){
                         float_array_calw[i] = mByteBuffer.getFloat(i*4);
