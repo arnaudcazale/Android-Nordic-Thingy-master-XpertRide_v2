@@ -366,6 +366,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         @Override
         public void onFsrDataValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] answer) {
+            //Log.e("THINGY CONNECTION", "FSR DATA RECEIVED" + Arrays.toString(answer));
             if( m_string_argument != null){
                 String string_argument = m_string_argument.substring(0, m_string_argument.indexOf(' '));
                 //Log.e("APP", "STRING ARGUMENT START " + string_argument);
@@ -376,8 +377,12 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     short mFSR2 = mByteBuffer.getShort(2);
                     short mFSR3 = mByteBuffer.getShort(4);
                     short mFSR4 = mByteBuffer.getShort(6);
-                    addGravityVectorEntry(mFSR1, mFSR2, mFSR3, mFSR4);
-                    updateLedColor_voltage(mFSR1, mFSR2, mFSR3, mFSR4);
+                    short mFSR5 = mByteBuffer.getShort(8);
+                    short mFSR6 = mByteBuffer.getShort(10);
+                    short mFSR7 = mByteBuffer.getShort(12);
+                    short mFSR8 = mByteBuffer.getShort(14);
+                    addGravityVectorEntry(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+                    //updateLedColor_voltage(mFSR1, mFSR2, mFSR3, mFSR4);
                 }else if(string_argument.compareTo("F") == 0){
                     final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
                     mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
@@ -390,7 +395,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     float mFSR7 = mByteBuffer.getFloat(24);
                     float mFSR8 = mByteBuffer.getFloat(28);
                     addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                    updateLedColor_force(mFSR1, mFSR2, mFSR3, mFSR4);
+                    //updateLedColor_force(mFSR1, mFSR2, mFSR3, mFSR4);
                 }else if(string_argument.compareTo("FC") == 0){
                     final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
                     mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
@@ -403,7 +408,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     float mFSR7 = mByteBuffer.getFloat(24);
                     float mFSR8 = mByteBuffer.getFloat(28);
                     addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                    updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
+                    //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
                 }else{
                     final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
                     mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floatingg
@@ -416,7 +421,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     float mFSR7 = mByteBuffer.getFloat(24);
                     float mFSR8 = mByteBuffer.getFloat(28);
                     addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                    updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
+                    //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
                 }
             }else{
                 final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
@@ -429,8 +434,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                 float mFSR6 = mByteBuffer.getFloat(20);
                 float mFSR7 = mByteBuffer.getFloat(24);
                 float mFSR8 = mByteBuffer.getFloat(28);
-                Log.e("APP", "FSR DATA RECEIVED " + mFSR1 + "-" + mFSR2 + "-" + mFSR3 + "-" + mFSR4 + "-" + mFSR5 + "-" + mFSR6 + "-" + mFSR7 + "-" + mFSR8);
-                Log.e("THINGY CONNECTION", "FSR DATA RECEIVED" + Arrays.toString(answer));
+                //Log.e("APP", "FSR DATA RECEIVED " + mFSR1 + "-" + mFSR2 + "-" + mFSR3 + "-" + mFSR4 + "-" + mFSR5 + "-" + mFSR6 + "-" + mFSR7 + "-" + mFSR8);
                 addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
                 //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
             }
@@ -1040,7 +1044,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
     }
 
-    private void addGravityVectorEntry(final short gravityVector1, final short gravityVector2, final short gravityVector3, final short gravityVector4) {
+    private void addGravityVectorEntry(final short gravityVector1, final short gravityVector2, final short gravityVector3, final short gravityVector4, final short gravityVector5, final short gravityVector6, final short gravityVector7, final short gravityVector8) {
         LineData data = mLineChartGravityVector.getData();
 
         if (data != null) {
@@ -1048,17 +1052,29 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
             ILineDataSet set2 = data.getDataSetByIndex(1);
             ILineDataSet set3 = data.getDataSetByIndex(2);
             ILineDataSet set4 = data.getDataSetByIndex(3);
+            ILineDataSet set5 = data.getDataSetByIndex(4);
+            ILineDataSet set6 = data.getDataSetByIndex(5);
+            ILineDataSet set7 = data.getDataSetByIndex(6);
+            ILineDataSet set8 = data.getDataSetByIndex(7);
 
-            if (set1 == null || set2 == null || set3 == null || set4 == null) {
+            if (set1 == null || set2 == null || set3 == null || set4 == null || set5 == null || set6 == null || set7 == null || set8 == null) {
                 final LineDataSet[] dataSets = createGravityVectorDataSet();
                 set1 = dataSets[0];
                 set2 = dataSets[1];
                 set3 = dataSets[2];
                 set4 = dataSets[3];
+                set5 = dataSets[4];
+                set6 = dataSets[5];
+                set7 = dataSets[6];
+                set8 = dataSets[7];
                 data.addDataSet(set1);
                 data.addDataSet(set2);
                 data.addDataSet(set3);
                 data.addDataSet(set4);
+                data.addDataSet(set5);
+                data.addDataSet(set6);
+                data.addDataSet(set7);
+                data.addDataSet(set8);
             }
 
             //data.addXValue(ThingyUtils.TIME_FORMAT_PEDOMETER.format(new Date()));
@@ -1067,6 +1083,10 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
             data.addEntry(new Entry(gravityVector2, set2.getEntryCount()), 1);
             data.addEntry(new Entry(gravityVector3, set3.getEntryCount()), 2);
             data.addEntry(new Entry(gravityVector4, set4.getEntryCount()), 3);
+            data.addEntry(new Entry(gravityVector5, set5.getEntryCount()), 4);
+            data.addEntry(new Entry(gravityVector6, set6.getEntryCount()), 5);
+            data.addEntry(new Entry(gravityVector7, set7.getEntryCount()), 6);
+            data.addEntry(new Entry(gravityVector8, set8.getEntryCount()), 7);
 
             mLineChartGravityVector.notifyDataSetChanged();
             mLineChartGravityVector.setVisibleXRangeMaximum(10);
