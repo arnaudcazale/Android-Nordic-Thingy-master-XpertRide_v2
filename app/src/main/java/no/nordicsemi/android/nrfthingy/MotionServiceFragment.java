@@ -448,8 +448,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
             final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
             mByteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-            //short[] short_array = new short[answer.length/2];
-            //String string = new String(answer);
 
             switch(m_string_command){
                 case "DEBUG":
@@ -552,6 +550,11 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     }
                     mTestView.setTextSize(20);
                     mTestView.setText(Arrays.toString(float_array_calw));
+                    break;
+                case "RBRIDGE":
+                    short resistor = mByteBuffer.getShort(0);
+                    mTestView.setTextSize(20);
+                    mTestView.setText(Short.toString(resistor));
                     break;
             }
         }
