@@ -556,6 +556,11 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     mTestView.setTextSize(20);
                     mTestView.setText(Short.toString(resistor));
                     break;
+                case "RGAIN":
+                    String gain = Arrays.toString(answer);
+                    mTestView.setTextSize(20);
+                    mTestView.setText(gain);
+                    break;
             }
         }
 
