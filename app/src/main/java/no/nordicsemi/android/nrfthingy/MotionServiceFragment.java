@@ -366,78 +366,128 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         @Override
         public void onFsrDataValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] answer) {
-            //Log.e("THINGY CONNECTION", "FSR DATA RECEIVED" + Arrays.toString(answer));
-            if( m_string_argument != null){
-                String string_argument = m_string_argument.substring(0, m_string_argument.indexOf(' '));
-                //Log.e("APP", "STRING ARGUMENT START " + string_argument);
-                if(string_argument.compareTo("V") == 0){
-                    final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
-                    mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
-                    short mFSR1 = mByteBuffer.getShort(0);
-                    short mFSR2 = mByteBuffer.getShort(2);
-                    short mFSR3 = mByteBuffer.getShort(4);
-                    short mFSR4 = mByteBuffer.getShort(6);
-                    short mFSR5 = mByteBuffer.getShort(8);
-                    short mFSR6 = mByteBuffer.getShort(10);
-                    short mFSR7 = mByteBuffer.getShort(12);
-                    short mFSR8 = mByteBuffer.getShort(14);
-                    addGravityVectorEntry(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                    //updateLedColor_voltage(mFSR1, mFSR2, mFSR3, mFSR4);
-                }else if(string_argument.compareTo("F") == 0){
-                    final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
-                    mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
-                    float mFSR1 = mByteBuffer.getFloat(0);
-                    float mFSR2 = mByteBuffer.getFloat(4);
-                    float mFSR3 = mByteBuffer.getFloat(8);
-                    float mFSR4 = mByteBuffer.getFloat(12);
-                    float mFSR5 = mByteBuffer.getFloat(16);
-                    float mFSR6 = mByteBuffer.getFloat(20);
-                    float mFSR7 = mByteBuffer.getFloat(24);
-                    float mFSR8 = mByteBuffer.getFloat(28);
-                    addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                    //updateLedColor_force(mFSR1, mFSR2, mFSR3, mFSR4);
-                }else if(string_argument.compareTo("FC") == 0){
-                    final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
-                    mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
-                    float mFSR1 = mByteBuffer.getFloat(0);
-                    float mFSR2 = mByteBuffer.getFloat(4);
-                    float mFSR3 = mByteBuffer.getFloat(8);
-                    float mFSR4 = mByteBuffer.getFloat(12);
-                    float mFSR5 = mByteBuffer.getFloat(16);
-                    float mFSR6 = mByteBuffer.getFloat(20);
-                    float mFSR7 = mByteBuffer.getFloat(24);
-                    float mFSR8 = mByteBuffer.getFloat(28);
-                    addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                    //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
-                }else{
-                    final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
-                    mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floatingg
-                    float mFSR1 = mByteBuffer.getFloat(0);
-                    float mFSR2 = mByteBuffer.getFloat(4);
-                    float mFSR3 = mByteBuffer.getFloat(8);
-                    float mFSR4 = mByteBuffer.getFloat(12);
-                    float mFSR5 = mByteBuffer.getFloat(16);
-                    float mFSR6 = mByteBuffer.getFloat(20);
-                    float mFSR7 = mByteBuffer.getFloat(24);
-                    float mFSR8 = mByteBuffer.getFloat(28);
-                    addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                    //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
-                }
-            }else{
-                final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
-                mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
-                float mFSR1 = mByteBuffer.getFloat(0);
-                float mFSR2 = mByteBuffer.getFloat(4);
-                float mFSR3 = mByteBuffer.getFloat(8);
-                float mFSR4 = mByteBuffer.getFloat(12);
-                float mFSR5 = mByteBuffer.getFloat(16);
-                float mFSR6 = mByteBuffer.getFloat(20);
-                float mFSR7 = mByteBuffer.getFloat(24);
-                float mFSR8 = mByteBuffer.getFloat(28);
-                //Log.e("APP", "FSR DATA RECEIVED " + mFSR1 + "-" + mFSR2 + "-" + mFSR3 + "-" + mFSR4 + "-" + mFSR5 + "-" + mFSR6 + "-" + mFSR7 + "-" + mFSR8);
-                addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+            Log.e("THINGY CONNECTION", "FSR DATA RECEIVED" + Arrays.toString(answer));
+
+            switch(m_string_command){
+                case "START":
+                    if( m_string_argument != null){
+                        String string_argument = m_string_argument.substring(0, m_string_argument.indexOf(' '));
+                        //Log.e("APP", "STRING ARGUMENT START " + string_argument);
+                        if(string_argument.compareTo("V") == 0){
+                            final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                            mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
+                            short mFSR1 = mByteBuffer.getShort(0);
+                            short mFSR2 = mByteBuffer.getShort(2);
+                            short mFSR3 = mByteBuffer.getShort(4);
+                            short mFSR4 = mByteBuffer.getShort(6);
+                            short mFSR5 = mByteBuffer.getShort(8);
+                            short mFSR6 = mByteBuffer.getShort(10);
+                            short mFSR7 = mByteBuffer.getShort(12);
+                            short mFSR8 = mByteBuffer.getShort(14);
+                            addGravityVectorEntry(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+                            //updateLedColor_voltage(mFSR1, mFSR2, mFSR3, mFSR4);
+                        }else if(string_argument.compareTo("F") == 0){
+                            final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                            mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
+                            float mFSR1 = mByteBuffer.getFloat(0);
+                            float mFSR2 = mByteBuffer.getFloat(4);
+                            float mFSR3 = mByteBuffer.getFloat(8);
+                            float mFSR4 = mByteBuffer.getFloat(12);
+                            float mFSR5 = mByteBuffer.getFloat(16);
+                            float mFSR6 = mByteBuffer.getFloat(20);
+                            float mFSR7 = mByteBuffer.getFloat(24);
+                            float mFSR8 = mByteBuffer.getFloat(28);
+                            addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+                            //updateLedColor_force(mFSR1, mFSR2, mFSR3, mFSR4);
+                        }else if(string_argument.compareTo("FC") == 0){
+                            final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                            mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
+                            float mFSR1 = mByteBuffer.getFloat(0);
+                            float mFSR2 = mByteBuffer.getFloat(4);
+                            float mFSR3 = mByteBuffer.getFloat(8);
+                            float mFSR4 = mByteBuffer.getFloat(12);
+                            float mFSR5 = mByteBuffer.getFloat(16);
+                            float mFSR6 = mByteBuffer.getFloat(20);
+                            float mFSR7 = mByteBuffer.getFloat(24);
+                            float mFSR8 = mByteBuffer.getFloat(28);
+                            addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+                            //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
+                        }else{
+                            final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                            mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floatingg
+                            float mFSR1 = mByteBuffer.getFloat(0);
+                            float mFSR2 = mByteBuffer.getFloat(4);
+                            float mFSR3 = mByteBuffer.getFloat(8);
+                            float mFSR4 = mByteBuffer.getFloat(12);
+                            float mFSR5 = mByteBuffer.getFloat(16);
+                            float mFSR6 = mByteBuffer.getFloat(20);
+                            float mFSR7 = mByteBuffer.getFloat(24);
+                            float mFSR8 = mByteBuffer.getFloat(28);
+                            addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+                            //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
+                        }
+                    }else{
+                        final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                        mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
+                        float mFSR1 = mByteBuffer.getFloat(0);
+                        float mFSR2 = mByteBuffer.getFloat(4);
+                        float mFSR3 = mByteBuffer.getFloat(8);
+                        float mFSR4 = mByteBuffer.getFloat(12);
+                        float mFSR5 = mByteBuffer.getFloat(16);
+                        float mFSR6 = mByteBuffer.getFloat(20);
+                        float mFSR7 = mByteBuffer.getFloat(24);
+                        float mFSR8 = mByteBuffer.getFloat(28);
+                        //Log.e("APP", "FSR DATA RECEIVED " + mFSR1 + "-" + mFSR2 + "-" + mFSR3 + "-" + mFSR4 + "-" + mFSR5 + "-" + mFSR6 + "-" + mFSR7 + "-" + mFSR8);
+                        addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+                        //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+                    }
+                    break;
+                case "RSTART":
+                    if( m_string_argument != null){
+                        String string_argument = m_string_argument.substring(0, m_string_argument.indexOf(' '));
+                        //Log.e("APP", "STRING ARGUMENT START " + string_argument);
+                        if(string_argument.compareTo("V") == 0){
+                            final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                            mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
+                            short mFSR1 = mByteBuffer.getShort(0);
+                            short mFSR2 = mByteBuffer.getShort(2);
+                            addGravityVectorEntry_head(mFSR1, mFSR2);
+                            //updateLedColor_voltage(mFSR1, mFSR2, mFSR3, mFSR4);
+                        }else if(string_argument.compareTo("F") == 0){
+                            final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                            mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
+                            float mFSR1 = mByteBuffer.getFloat(0);
+                            float mFSR2 = mByteBuffer.getFloat(4);
+                            addGravityVectorEntry_head_float(mFSR1, mFSR2);
+                            //updateLedColor_force(mFSR1, mFSR2, mFSR3, mFSR4);
+                        }else if(string_argument.compareTo("FC") == 0){
+                            final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                            mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
+                            float mFSR1 = mByteBuffer.getFloat(0);
+                            float mFSR2 = mByteBuffer.getFloat(4);
+                            float mFSR3 = mByteBuffer.getFloat(8);
+                            addGravityVectorEntry_head_float(mFSR1, mFSR2);
+                            //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
+                        }else{
+                            final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                            mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floatingg
+                            float mFSR1 = mByteBuffer.getFloat(0);
+                            float mFSR2 = mByteBuffer.getFloat(4);
+                            addGravityVectorEntry_head_float(mFSR1, mFSR2);
+                            //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
+                        }
+                    }else{
+                        final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
+                        mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
+                        float mFSR1 = mByteBuffer.getFloat(0);
+                        float mFSR2 = mByteBuffer.getFloat(4);
+                        //Log.e("APP", "FSR DATA RECEIVED " + mFSR1 + "-" + mFSR2 + "-" + mFSR3 + "-" + mFSR4 + "-" + mFSR5 + "-" + mFSR6 + "-" + mFSR7 + "-" + mFSR8);
+                        addGravityVectorEntry_head_float(mFSR1, mFSR2);
+                        //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+                    }
+                    break;
             }
+
         }
 
         @Override
@@ -1053,6 +1103,32 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
     }
 
+    private void addGravityVectorEntry_head_float(final float gravityVector1, final float gravityVector2) {
+        LineData data = mLineChartGravityVector.getData();
+
+        if (data != null) {
+            ILineDataSet set1 = data.getDataSetByIndex(0);
+            ILineDataSet set2 = data.getDataSetByIndex(1);
+
+            if (set1 == null || set2 == null) {
+                final LineDataSet[] dataSets = createGravityVectorDataSet();
+                set1 = dataSets[0];
+                set2 = dataSets[1];
+                data.addDataSet(set1);
+                data.addDataSet(set2);
+            }
+
+            //data.addXValue(ThingyUtils.TIME_FORMAT_PEDOMETER.format(new Date()));
+            data.addXValue("");
+            data.addEntry(new Entry(gravityVector1, set1.getEntryCount()), 0);
+            data.addEntry(new Entry(gravityVector2, set2.getEntryCount()), 1);
+
+            mLineChartGravityVector.notifyDataSetChanged();
+            mLineChartGravityVector.setVisibleXRangeMaximum(10);
+            mLineChartGravityVector.moveViewToX(data.getXValCount() - 11);
+        }
+    }
+
     private void addGravityVectorEntry(final short gravityVector1, final short gravityVector2, final short gravityVector3, final short gravityVector4, final short gravityVector5, final short gravityVector6, final short gravityVector7, final short gravityVector8) {
         LineData data = mLineChartGravityVector.getData();
 
@@ -1096,6 +1172,33 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
             data.addEntry(new Entry(gravityVector6, set6.getEntryCount()), 5);
             data.addEntry(new Entry(gravityVector7, set7.getEntryCount()), 6);
             data.addEntry(new Entry(gravityVector8, set8.getEntryCount()), 7);
+
+            mLineChartGravityVector.notifyDataSetChanged();
+            mLineChartGravityVector.setVisibleXRangeMaximum(10);
+            mLineChartGravityVector.moveViewToX(data.getXValCount() - 11);
+        }
+    }
+
+    private void addGravityVectorEntry_head(final short gravityVector1, final short gravityVector2) {
+        LineData data = mLineChartGravityVector.getData();
+
+        if (data != null) {
+            ILineDataSet set1 = data.getDataSetByIndex(0);
+            ILineDataSet set2 = data.getDataSetByIndex(1);
+
+            if (set1 == null || set2 == null ) {
+                final LineDataSet[] dataSets = createGravityVectorDataSet();
+                set1 = dataSets[0];
+                set2 = dataSets[1];
+                data.addDataSet(set1);
+                data.addDataSet(set2);
+
+            }
+
+            //data.addXValue(ThingyUtils.TIME_FORMAT_PEDOMETER.format(new Date()));
+            data.addXValue("");
+            data.addEntry(new Entry(gravityVector1, set1.getEntryCount()), 0);
+            data.addEntry(new Entry(gravityVector2, set2.getEntryCount()), 1);
 
             mLineChartGravityVector.notifyDataSetChanged();
             mLineChartGravityVector.setVisibleXRangeMaximum(10);
@@ -1317,6 +1420,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
     private void parseCommand() {
         switch(m_string_command){
+            case "RSTART":
             case "START":
                 enableQuaternionNotifications(true);
                 Log.e("APP", "enable cccd quaternions");
