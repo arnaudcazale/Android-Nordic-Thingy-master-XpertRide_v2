@@ -1608,6 +1608,7 @@ public class ThingySdkManager {
     }
 
     public void requestMtu(final BluetoothDevice device) {
+        Log.e("ThingySdkMAnager", "request MTU");
         if (device != null) {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
@@ -1616,6 +1617,18 @@ public class ThingySdkManager {
                 }
             }
         }
+    }
+
+    public int mtuSizeGet(final BluetoothDevice device){
+        if (device != null) {
+            if (mBinder != null) {
+                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                if (thingyConnection != null) {
+                   return thingyConnection.mMtuGet();
+                }
+            }
+        }
+        return -1;
     }
 
     /**

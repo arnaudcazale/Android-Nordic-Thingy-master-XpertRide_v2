@@ -714,6 +714,14 @@ public class ThingyConnection extends BluetoothGattCallback {
         }
     }
 
+
+    public int mMtuGet() {
+        int mtu;
+        mtu = mMtu;
+        return mtu;
+    }
+
+
     /**
      * Connects to a particular thingy
      *

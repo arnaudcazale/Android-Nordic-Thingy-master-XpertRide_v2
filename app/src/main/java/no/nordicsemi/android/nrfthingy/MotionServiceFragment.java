@@ -159,10 +159,12 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
             //Connectivity callbacks handled by main activity
             //Allow command characteristic to answer
-//            enableCommandNotifications(true);
-//            Log.e("APP SERVICE DISCOVERY COMPLETED", "enable cccd command");
+            //enableCommandNotifications(true);
+            //Log.e("APP SERVICE DISCOVERY COMPLETED", "enable cccd command");
             //Request long size MTU for sending longer write command (set to 20 bytes if not)
-            mThingySdkManager.requestMtu(mDevice);
+            //mThingySdkManager.requestMtu(mDevice);
+            //while(mThingySdkManager.mtuSizeGet(mDevice) != 276);
+            //Log.e("APP SERVICE DISCOVERY COMPLETED", "mTu Size = " + mThingySdkManager.mtuSizeGet(mDevice) );
         }
 
         @Override
@@ -179,6 +181,11 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         public void onServiceDiscoveryCompleted(BluetoothDevice device) {
             if (mDevice.equals(device)) {
                 mIsConnected = true;
+                enableCommandNotifications(true);
+                Log.e("APP SERVICE DISCOVERY COMPLETED", "enable cccd command");
+                //Request long size MTU for sending longer write command (set to 20 bytes if not)
+                mThingySdkManager.requestMtu(mDevice);
+                Log.e("APP SERVICE DISCOVERY COMPLETED", "requestMtu");
                 if (Utils.checkIfVersionIsAboveJellyBean()) {
                     mRenderer.setConnectionState(true);
                     if (mDatabaseHelper.getNotificationsState(mDevice.getAddress(), DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION)) {
@@ -186,11 +193,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     }
                 }
             }
-
-//            enableCommandNotifications(true);
-//            Log.e("APP SERVICE DISCOVERY COMPLETED", "enable cccd command");
-            //Request long size MTU for sending longer write command (set to 20 bytes if not)
-//            mThingySdkManager.requestMtu(mDevice);
         }
 
         @Override
@@ -666,9 +668,11 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         //Allow first command characteristic to answer
         enableCommandNotifications(true);
-        Log.e("APP", "enable cccd command");
+        Log.e("APP SERVICE DISCOVERY COMPLETED", "enable cccd command");
         //Request long size MTU for sending longer write command (set to 20 bytes if not)
         mThingySdkManager.requestMtu(mDevice);
+        Log.e("APP SERVICE DISCOVERY COMPLETED", "request mtu");
+
 
         mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
