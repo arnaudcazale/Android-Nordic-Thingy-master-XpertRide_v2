@@ -374,7 +374,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                 case "START":
                     if( m_string_argument != null){
                         String string_argument = m_string_argument.substring(0, m_string_argument.indexOf(' '));
-                        //Log.e("APP", "STRING ARGUMENT START " + string_argument);
+                        Log.e("APP", "STRING ARGUMENT START " + string_argument);
                         if(string_argument.compareTo("V") == 0){
                             final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
                             mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
@@ -446,8 +446,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     break;
                 case "RSTART":
                     if( m_string_argument != null){
+                        Log.e("APP", "STRING ARGUMENT START " + m_string_argument);
                         String string_argument = m_string_argument.substring(0, m_string_argument.indexOf(' '));
-                        //Log.e("APP", "STRING ARGUMENT START " + string_argument);
                         if(string_argument.compareTo("V") == 0){
                             final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
                             mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
@@ -467,7 +467,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                             mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
                             float mFSR1 = mByteBuffer.getFloat(0);
                             float mFSR2 = mByteBuffer.getFloat(4);
-                            float mFSR3 = mByteBuffer.getFloat(8);
                             addGravityVectorEntry_head_float(mFSR1, mFSR2);
                             //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
                         }else{
@@ -682,6 +681,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                 enableGravityVectorNotifications(false);
 
                 //Convert string to uppercase
+                m_string_command = null;
+                m_string_argument = null;
                 m_string = mTextCommand.getText().toString();
                 m_string = m_string.toUpperCase();
 
