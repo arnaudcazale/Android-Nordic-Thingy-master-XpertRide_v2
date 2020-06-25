@@ -1185,6 +1185,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     }
 
     private void addGravityVectorEntry_head(final short gravityVector1, final short gravityVector2) {
+        Log.e("APP", "addGravityVectorEntry_head " + gravityVector1 + gravityVector2);
         LineData data = mLineChartGravityVector.getData();
 
         if (data != null) {
