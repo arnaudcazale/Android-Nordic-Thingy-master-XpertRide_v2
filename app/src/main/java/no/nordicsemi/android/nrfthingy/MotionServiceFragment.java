@@ -451,9 +451,20 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                         if(string_argument.compareTo("V") == 0){
                             final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
                             mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
-                            short mFSR1 = mByteBuffer.getShort(0);
-                            short mFSR2 = mByteBuffer.getShort(2);
-                            addGravityVectorEntry_head(mFSR1, mFSR2);
+                            byte ID = mByteBuffer.get(0);
+
+                            if(ID == 8){
+                                short mFSRL = mByteBuffer.getShort(1);
+                                short mFSRR = mByteBuffer.getShort(3);
+                                addGravityVectorEntry_head_both(mFSRL, mFSRR);
+                            }else if ( (ID == 6) || (ID == 7) ){
+                                short mFSR = mByteBuffer.getShort(1);
+                                addGravityVectorEntry_head(ID, mFSR);
+                            }
+
+
+
+
                             //updateLedColor_voltage(mFSR1, mFSR2, mFSR3, mFSR4);
                         }else if(string_argument.compareTo("F") == 0){
                             final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
@@ -1184,33 +1195,117 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
     }
 
-    private void addGravityVectorEntry_head(final short gravityVector1, final short gravityVector2) {
-        Log.e("APP", "addGravityVectorEntry_head " + gravityVector1 + gravityVector2);
+    private void addGravityVectorEntry_head(final int ID, final short gravityVector) {
+        //Log.e("APP", "addGravityVectorEntry_head " + ID + " " + gravityVector );
+
         LineData data = mLineChartGravityVector.getData();
 
         if (data != null) {
             ILineDataSet set1 = data.getDataSetByIndex(0);
             ILineDataSet set2 = data.getDataSetByIndex(1);
+            ILineDataSet set3 = data.getDataSetByIndex(2);
+            ILineDataSet set4 = data.getDataSetByIndex(3);
+            ILineDataSet set5 = data.getDataSetByIndex(4);
+            ILineDataSet set6 = data.getDataSetByIndex(5);
+            ILineDataSet set7 = data.getDataSetByIndex(6);
+            ILineDataSet set8 = data.getDataSetByIndex(7);
 
-            if (set1 == null || set2 == null ) {
+            if (set1 == null || set2 == null || set3 == null || set4 == null || set5 == null || set6 == null || set7 == null || set8 == null) {
                 final LineDataSet[] dataSets = createGravityVectorDataSet();
                 set1 = dataSets[0];
                 set2 = dataSets[1];
+                set3 = dataSets[2];
+                set4 = dataSets[3];
+                set5 = dataSets[4];
+                set6 = dataSets[5];
+                set7 = dataSets[6];
+                set8 = dataSets[7];
                 data.addDataSet(set1);
                 data.addDataSet(set2);
-
+                data.addDataSet(set3);
+                data.addDataSet(set4);
+                data.addDataSet(set5);
+                data.addDataSet(set6);
+                data.addDataSet(set7);
+                data.addDataSet(set8);
             }
 
             //data.addXValue(ThingyUtils.TIME_FORMAT_PEDOMETER.format(new Date()));
             data.addXValue("");
+
+            if(ID == 6) {
+                data.addEntry(new Entry(gravityVector, set1.getEntryCount()), 0);
+                data.addEntry(new Entry(0, set2.getEntryCount()), 1);
+            }else if (ID == 7) {
+                data.addEntry(new Entry(gravityVector, set2.getEntryCount()), 1);
+                data.addEntry(new Entry(0, set1.getEntryCount()), 0);
+            }
+
+            data.addEntry(new Entry(0, set3.getEntryCount()), 2);
+            data.addEntry(new Entry(0, set4.getEntryCount()), 3);
+            data.addEntry(new Entry(0, set5.getEntryCount()), 4);
+            data.addEntry(new Entry(0, set6.getEntryCount()), 5);
+            data.addEntry(new Entry(0, set7.getEntryCount()), 6);
+            data.addEntry(new Entry(0, set8.getEntryCount()), 7);
+
+            mLineChartGravityVector.notifyDataSetChanged();
+            mLineChartGravityVector.setVisibleXRangeMaximum(10);
+            mLineChartGravityVector.moveViewToX(data.getXValCount() - 11);
+        }
+
+    }
+    private void addGravityVectorEntry_head_both(final short gravityVector1, final short gravityVector2) {
+        //Log.e("APP", "addGravityVectorEntry_head_both " + gravityVector1 + " " + gravityVector2);
+        LineData data = mLineChartGravityVector.getData();
+
+        if (data != null) {
+            ILineDataSet set1 = data.getDataSetByIndex(0);
+            ILineDataSet set2 = data.getDataSetByIndex(1);
+            ILineDataSet set3 = data.getDataSetByIndex(2);
+            ILineDataSet set4 = data.getDataSetByIndex(3);
+            ILineDataSet set5 = data.getDataSetByIndex(4);
+            ILineDataSet set6 = data.getDataSetByIndex(5);
+            ILineDataSet set7 = data.getDataSetByIndex(6);
+            ILineDataSet set8 = data.getDataSetByIndex(7);
+
+            if (set1 == null || set2 == null || set3 == null || set4 == null || set5 == null || set6 == null || set7 == null || set8 == null) {
+                final LineDataSet[] dataSets = createGravityVectorDataSet();
+                set1 = dataSets[0];
+                set2 = dataSets[1];
+                set3 = dataSets[2];
+                set4 = dataSets[3];
+                set5 = dataSets[4];
+                set6 = dataSets[5];
+                set7 = dataSets[6];
+                set8 = dataSets[7];
+                data.addDataSet(set1);
+                data.addDataSet(set2);
+                data.addDataSet(set3);
+                data.addDataSet(set4);
+                data.addDataSet(set5);
+                data.addDataSet(set6);
+                data.addDataSet(set7);
+                data.addDataSet(set8);
+            }
+
+            //data.addXValue(ThingyUtils.TIME_FORMAT_PEDOMETER.format(new Date()));
+            data.addXValue("");
+
             data.addEntry(new Entry(gravityVector1, set1.getEntryCount()), 0);
             data.addEntry(new Entry(gravityVector2, set2.getEntryCount()), 1);
+            data.addEntry(new Entry(0, set3.getEntryCount()), 2);
+            data.addEntry(new Entry(0, set4.getEntryCount()), 3);
+            data.addEntry(new Entry(0, set5.getEntryCount()), 4);
+            data.addEntry(new Entry(0, set6.getEntryCount()), 5);
+            data.addEntry(new Entry(0, set7.getEntryCount()), 6);
+            data.addEntry(new Entry(0, set8.getEntryCount()), 7);
 
             mLineChartGravityVector.notifyDataSetChanged();
             mLineChartGravityVector.setVisibleXRangeMaximum(10);
             mLineChartGravityVector.moveViewToX(data.getXValCount() - 11);
         }
     }
+
 
     private void updateLedColor_voltage(final short gravityVector1, final short gravityVector2, final short gravityVector3, final short gravityVector4) {
         if(gravityVector1 > ThresholdVoltageHigh){
