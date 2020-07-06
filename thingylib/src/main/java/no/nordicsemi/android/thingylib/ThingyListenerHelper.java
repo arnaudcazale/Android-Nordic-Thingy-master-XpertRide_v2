@@ -365,6 +365,18 @@ public class ThingyListenerHelper {
 
                     //Log.e("THINGY LISTENER HELPER", "COMMAND ANSWER DATA RECEIVED" + Arrays.toString(answer));
                     break;
+                case ThingyUtils.IMPACT_NOTIFICATION:
+                    final int ID = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_IMPACT);
+                    if(globalListener != null) {
+                        globalListener.onImpactValueChangedEvent(device, ID);
+                    }
+
+                    if(thingyListener != null) {
+                        thingyListener.onImpactValueChangedEvent(device, ID);
+                    }
+
+                    //Log.e("THINGY LISTENER HELPER", "COMMAND ANSWER DATA RECEIVED" + Arrays.toString(answer));
+                    break;
             }
         }
     }
@@ -401,6 +413,7 @@ public class ThingyListenerHelper {
             intentFilter.addAction(ThingyUtils.GRAVITY_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.COMMAND_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.FSRDATA_NOTIFICATION);
+            intentFilter.addAction(ThingyUtils.IMPACT_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.SPEAKER_STATUS_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.MICROPHONE_NOTIFICATION);
 
@@ -441,6 +454,7 @@ public class ThingyListenerHelper {
             intentFilter.addAction(ThingyUtils.GRAVITY_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.COMMAND_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.FSRDATA_NOTIFICATION);
+            intentFilter.addAction(ThingyUtils.IMPACT_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.SPEAKER_STATUS_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.MICROPHONE_NOTIFICATION);
 

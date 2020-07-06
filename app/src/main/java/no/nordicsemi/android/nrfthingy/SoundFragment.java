@@ -219,6 +219,11 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
         }
 
         @Override
+        public void onImpactValueChangedEvent(BluetoothDevice bluetoothDevice, int ID) {
+
+        }
+
+        @Override
         public void onSpeakerStatusValueChangedEvent(BluetoothDevice bluetoothDevice, int status) {
 
         }

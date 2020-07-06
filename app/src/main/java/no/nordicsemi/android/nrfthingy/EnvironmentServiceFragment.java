@@ -270,6 +270,11 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
 
         @Override
+        public void onImpactValueChangedEvent(BluetoothDevice bluetoothDevice, int ID) {
+
+        }
+
+        @Override
         public void onSpeakerStatusValueChangedEvent(BluetoothDevice bluetoothDevice, int status) {
 
         }

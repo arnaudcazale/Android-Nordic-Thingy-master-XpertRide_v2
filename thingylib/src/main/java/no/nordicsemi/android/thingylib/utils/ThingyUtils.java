@@ -106,6 +106,7 @@ public class ThingyUtils {
 
     public static final UUID COMMAND_CHARACTERISTIC                                             = new UUID(0xEF68040B9B354933L, 0x9B1052FFA9740042L);
     public static final UUID FSRDATA_CHARACTERISTIC                                             = new UUID(0xEF68040C9B354933L, 0x9B1052FFA9740042L);
+    public static final UUID IMPACT_CHARACTERISTIC                                              = new UUID(0xEF68040D9B354933L, 0x9B1052FFA9740042L);
 
     public static final UUID THINGY_SOUND_SERVICE                                               = new UUID(0xEF6805009B354933L, 0x9B1052FFA9740042L);
     public static final UUID THINGY_SOUND_CONFIG_CHARACTERISTIC                                 = new UUID(0xEF6805019B354933L, 0x9B1052FFA9740042L);
@@ -162,6 +163,7 @@ public class ThingyUtils {
     public static final String GRAVITY_NOTIFICATION                                             = "GRAVITY_NOTIFICATION_";
     public static final String FSRDATA_NOTIFICATION                                             = "FSRDATA_NOTIFICATION_";
     public static final String COMMAND_NOTIFICATION                                             = "COMMAND_NOTIFICATION_";
+    public static final String IMPACT_NOTIFICATION                                              = "IMPACT_NOTIFICATION_";
 
     public static final String SPEAKER_STATUS_NOTIFICATION                                      = "SPEAKER_STATUS_NOTIFICATION";
     public static final String MICROPHONE_NOTIFICATION                                          = "MICROPHONE_NOTIFICATION";
@@ -210,6 +212,7 @@ public class ThingyUtils {
     public static final String EXTRA_DATA_RAW                                                   = "EXTRA_DATA_RAW";
 
     public static final String EXTRA_DATA_COMMAND                                               = "EXTRA_DATA_COMMAND";
+    public static final String EXTRA_DATA_IMPACT                                                = "EXTRA_DATA_IMPACT";
 
     public static final String EXTRA_DATA_COMPASS_X                                             = "EXTRA_DATA_COMPASS_X";
     public static final String EXTRA_DATA_COMPASS_Y                                             = "EXTRA_DATA_COMPASS_Y";

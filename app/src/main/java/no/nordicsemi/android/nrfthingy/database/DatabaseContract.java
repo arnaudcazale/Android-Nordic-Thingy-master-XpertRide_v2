@@ -70,6 +70,7 @@ public class DatabaseContract {
         public static final String COLUMN_NOTIFICATION_PEDOMETER = "notification_pedometer";
         public static final String COLUMN_NOTIFICATION_RAW_DATA = "notification_raw_data";
         public static final String COLUMN_NOTIFICATION_FSR_DATA = "notification_fsr_data";
+        public static final String COLUMN_NOTIFICATION_IMPACT_DATA = "notification_fsr_data";
 
     }
 

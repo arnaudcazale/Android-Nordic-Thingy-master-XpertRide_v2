@@ -111,6 +111,7 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     private BluetoothGattCharacteristic mCommandCharacteristic;
     private BluetoothGattCharacteristic mFSRdataCharacteristic;
+    private BluetoothGattCharacteristic mImpactCharacteristic;
 
     private BluetoothGattCharacteristic mSoundConfigurationCharacteristic;
     private BluetoothGattCharacteristic mSpeakerDataCharacteristic;
@@ -334,6 +335,8 @@ public class ThingyConnection extends BluetoothGattCallback {
 
             mCommandCharacteristic = mMotionService.getCharacteristic(ThingyUtils.COMMAND_CHARACTERISTIC);
             mFSRdataCharacteristic = mMotionService.getCharacteristic(ThingyUtils.FSRDATA_CHARACTERISTIC);
+
+            mImpactCharacteristic = mMotionService.getCharacteristic(ThingyUtils.IMPACT_CHARACTERISTIC);
 
             Log.v(TAG, "Reading motion config chars");
         }
@@ -565,6 +568,13 @@ public class ThingyConnection extends BluetoothGattCallback {
             final Intent intent = new Intent(ThingyUtils.COMMAND_NOTIFICATION);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             intent.putExtra(ThingyUtils.EXTRA_DATA_COMMAND,data);
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+
+        } else if (characteristic.equals(mImpactCharacteristic)) {
+            final int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT32, 0);
+            final Intent intent = new Intent(ThingyUtils.IMPACT_NOTIFICATION);
+            intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
+            intent.putExtra(ThingyUtils.EXTRA_DATA_IMPACT,data);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
         } else if (characteristic.equals(mSpeakerStatusCharacteristic)) {
@@ -1022,6 +1032,8 @@ public class ThingyConnection extends BluetoothGattCallback {
         add(RequestType.READ_DESCRIPTOR, mRotationMatrixCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR));
         add(RequestType.READ_DESCRIPTOR, mHeadingCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR));
         add(RequestType.READ_DESCRIPTOR, mGravityVectorCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR));
+
+        add(RequestType.READ_DESCRIPTOR, mImpactCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR));
 
         add(RequestType.READ_CHARACTERISTIC, mSoundConfigurationCharacteristic);
         add(RequestType.READ_DESCRIPTOR, mSpeakerStatusCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR));
@@ -2270,6 +2282,23 @@ public class ThingyConnection extends BluetoothGattCallback {
                 if (isNotificationsAlreadyEnabled(fsrDataDescriptor)) {
                     byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, fsrDataDescriptor, data);
+                }
+            }
+        }
+    }
+
+    final void enableImpactNotifications(final boolean enable) {
+        if (mImpactCharacteristic != null) {
+            final BluetoothGattDescriptor ImpactDataDescriptor = mImpactCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
+            if (enable) {
+                if (!isNotificationsAlreadyEnabled(ImpactDataDescriptor)) {
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
+                    add(RequestType.WRITE_DESCRIPTOR, ImpactDataDescriptor, data);
+                }
+            } else {
+                if (isNotificationsAlreadyEnabled(ImpactDataDescriptor)) {
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    add(RequestType.WRITE_DESCRIPTOR, ImpactDataDescriptor, data);
                 }
             }
         }

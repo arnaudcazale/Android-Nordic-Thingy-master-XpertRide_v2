@@ -1386,6 +1386,17 @@ public class ThingySdkManager {
         }
     }
 
+    public void enableImpactNotifications(final BluetoothDevice device, final boolean enable) {
+        if (device != null) {
+            if (mBinder != null) {
+                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                if (thingyConnection != null) {
+                    thingyConnection.enableImpactNotifications(enable);
+                }
+            }
+        }
+    }
+
     /**
      * Toggle Euler notifications for a particular thingy.
      *

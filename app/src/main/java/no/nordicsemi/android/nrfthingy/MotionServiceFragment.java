@@ -43,6 +43,8 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -127,6 +129,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     //private int mSelectedRgbColorIntensity;
     private short ThresholdVoltageLow = 200;
     private short ThresholdVoltageHigh = 3000;
+
+    private TextView mImpactCount;
 
     private TextView mTapCount;
     private TextView mTapDirection;
@@ -635,6 +639,18 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, final byte[] data) {
 
         }
+
+        @Override
+        public void onImpactValueChangedEvent(BluetoothDevice bluetoothDevice, int impact) {
+            //Log.e("MotionServiceFragment", "---IMPACT---" + impact);
+            mImpactCount.setText(String.valueOf(impact));
+            try{
+                ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+                toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
+            }catch(Exception e){
+            }
+
+        }
     };
 
     public static MotionServiceFragment newInstance(final BluetoothDevice device) {
@@ -679,6 +695,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         //Allow first command characteristic to answer
         enableCommandNotifications(true);
         Log.e("APP SERVICE DISCOVERY COMPLETED", "enable cccd command");
+        enableImpactNotifications(true);
+        Log.e("APP SERVICE DISCOVERY COMPLETED", "enable cccd impact");
         //Request long size MTU for sending longer write command (set to 20 bytes if not)
         mThingySdkManager.requestMtu(mDevice);
         Log.e("APP SERVICE DISCOVERY COMPLETED", "request mtu");
@@ -728,6 +746,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         mPedometerDuration = rootView.findViewById(R.id.duration);
         mHeading = rootView.findViewById(R.id.heading);
         mHeadingDirection = rootView.findViewById(R.id.heading_direction);
+
+        mImpactCount = rootView.findViewById(R.id.impact_count);
 
         mOrientation.setText(ThingyUtils.PORTRAIT);
 
@@ -1254,6 +1274,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
 
     }
+
     private void addGravityVectorEntry_head_both(final short gravityVector1, final short gravityVector2) {
         //Log.e("APP", "addGravityVectorEntry_head_both " + gravityVector1 + " " + gravityVector2);
         LineData data = mLineChartGravityVector.getData();
@@ -1305,7 +1326,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
             mLineChartGravityVector.moveViewToX(data.getXValCount() - 11);
         }
     }
-
 
     private void updateLedColor_voltage(final short gravityVector1, final short gravityVector2, final short gravityVector3, final short gravityVector4) {
         if(gravityVector1 > ThresholdVoltageHigh){
@@ -1359,11 +1379,9 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
     }
 
-
     private void updateLedColor_force_calculated(final float gravityVector1, final float gravityVector2, final float gravityVector3, final float gravityVector4) {
 
     }
-
 
     class GravityVectorYValueFormatter implements YAxisValueFormatter {
         private DecimalFormat mFormat;
@@ -1487,6 +1505,11 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     private void enableFsrDataNotifications(final boolean notificationEnabled) {
         mThingySdkManager.enableFsrDataNotifications(mDevice, notificationEnabled);
         //mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), notificationEnabled, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_FSR_DATA);
+    }
+
+    private void enableImpactNotifications(final boolean notificationEnabled) {
+        mThingySdkManager.enableImpactNotifications(mDevice, notificationEnabled);
+//        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), notificationEnabled, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_IMPACT_DATA);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

@@ -241,6 +241,11 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         }
 
         @Override
+        public void onImpactValueChangedEvent(BluetoothDevice bluetoothDevice, int ID) {
+
+        }
+
+        @Override
         public void onSpeakerStatusValueChangedEvent(BluetoothDevice bluetoothDevice, int status) {
 
         }

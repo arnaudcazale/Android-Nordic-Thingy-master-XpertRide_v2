@@ -190,6 +190,11 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
         }
 
         @Override
+        public void onImpactValueChangedEvent(BluetoothDevice bluetoothDevice, int ID) {
+
+        }
+
+        @Override
         public void onSpeakerStatusValueChangedEvent(BluetoothDevice bluetoothDevice, int status) {
 
         }

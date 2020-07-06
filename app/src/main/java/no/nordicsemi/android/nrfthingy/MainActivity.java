@@ -338,6 +338,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @Override
+        public void onImpactValueChangedEvent(BluetoothDevice bluetoothDevice, int ID) {
+
+        }
+
+        @Override
         public void onSpeakerStatusValueChangedEvent(final BluetoothDevice bluetoothDevice, final int status) {
 
         }

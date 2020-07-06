@@ -321,6 +321,11 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
 
         @Override
+        public void onImpactValueChangedEvent(BluetoothDevice bluetoothDevice, int ID) {
+
+        }
+
+        @Override
         public void onSpeakerStatusValueChangedEvent(BluetoothDevice bluetoothDevice, int status) {
 
         }

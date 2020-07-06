@@ -88,9 +88,10 @@ public interface ThingyListener  {
 
     void onMicrophoneValueChangedEvent(final BluetoothDevice bluetoothDevice, final byte [] data);
 
-    //void onFsrDataValueChangedEvent(final BluetoothDevice bluetoothDevice, final short a, final short b, final short c);
     void onFsrDataValueChangedEvent(final BluetoothDevice bluetoothDevice, final byte [] answer_FSR);
 
     void onCommandValueChangedEvent(final BluetoothDevice bluetoothDevice, final byte [] answer);
+
+    void onImpactValueChangedEvent(final BluetoothDevice bluetoothDevice, final int ID);
 
 }
