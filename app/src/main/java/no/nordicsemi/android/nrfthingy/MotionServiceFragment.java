@@ -185,11 +185,14 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         public void onServiceDiscoveryCompleted(BluetoothDevice device) {
             if (mDevice.equals(device)) {
                 mIsConnected = true;
+                //Allow first command characteristic to answer
                 enableCommandNotifications(true);
                 Log.e("APP SERVICE DISCOVERY COMPLETED", "enable cccd command");
+                enableImpactNotifications(true);
+                Log.e("APP SERVICE DISCOVERY COMPLETED", "enable cccd impact");
                 //Request long size MTU for sending longer write command (set to 20 bytes if not)
                 mThingySdkManager.requestMtu(mDevice);
-                Log.e("APP SERVICE DISCOVERY COMPLETED", "requestMtu");
+                Log.e("APP SERVICE DISCOVERY COMPLETED", "request mtu");
                 if (Utils.checkIfVersionIsAboveJellyBean()) {
                     mRenderer.setConnectionState(true);
                     if (mDatabaseHelper.getNotificationsState(mDevice.getAddress(), DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION)) {
@@ -391,7 +394,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                             short mFSR7 = mByteBuffer.getShort(12);
                             short mFSR8 = mByteBuffer.getShort(14);
                             addGravityVectorEntry(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                            //updateLedColor_voltage(mFSR1, mFSR2, mFSR3, mFSR4);
+                            updateLedColor_voltage(mFSR1, mFSR2, mFSR3, mFSR4);
                         }else if(string_argument.compareTo("F") == 0){
                             final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
                             mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
@@ -404,7 +407,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                             float mFSR7 = mByteBuffer.getFloat(24);
                             float mFSR8 = mByteBuffer.getFloat(28);
                             addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                            //updateLedColor_force(mFSR1, mFSR2, mFSR3, mFSR4);
+                            updateLedColor_force(mFSR1, mFSR2, mFSR3, mFSR4);
                         }else if(string_argument.compareTo("FC") == 0){
                             final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
                             mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floating
@@ -417,7 +420,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                             float mFSR7 = mByteBuffer.getFloat(24);
                             float mFSR8 = mByteBuffer.getFloat(28);
                             addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                            //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
+                            updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
                         }else{
                             final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
                             mByteBuffer.order(ByteOrder.LITTLE_ENDIAN); // setting to little endian as 32bit float from the nRF 52 is IEEE 754 floatingg
@@ -430,7 +433,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                             float mFSR7 = mByteBuffer.getFloat(24);
                             float mFSR8 = mByteBuffer.getFloat(28);
                             addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                            //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
+                            updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
                         }
                     }else{
                         final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
@@ -445,7 +448,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                         float mFSR8 = mByteBuffer.getFloat(28);
                         //Log.e("APP", "FSR DATA RECEIVED " + mFSR1 + "-" + mFSR2 + "-" + mFSR3 + "-" + mFSR4 + "-" + mFSR5 + "-" + mFSR6 + "-" + mFSR7 + "-" + mFSR8);
                         addGravityVectorEntry_float(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
-                        //updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4, mFSR5, mFSR6, mFSR7, mFSR8);
+                        updateLedColor_force_calculated(mFSR1, mFSR2, mFSR3, mFSR4);
                     }
                     break;
                 case "RSTART":
@@ -508,9 +511,9 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         @Override
         public void onCommandValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] answer) {
-            Log.e("MOTION SERVICE FRAGMENT", "STRING LENGTH " + answer.length);
-            Log.e("MOTION SERVICE FRAGMENT", "COMMAND ANSWER DATA RECEIVED TO STRING" + Arrays.toString(answer));
-            Log.e("MOTION SERVICE FRAGMENT", "COMMAND ANSWER DATA RECEIVED " + answer);
+            //Log.e("MOTION SERVICE FRAGMENT", "STRING LENGTH " + answer.length);
+            //Log.e("MOTION SERVICE FRAGMENT", "COMMAND ANSWER DATA RECEIVED TO STRING" + Arrays.toString(answer));
+            //Log.e("MOTION SERVICE FRAGMENT", "COMMAND ANSWER DATA RECEIVED " + answer);
 
             final ByteBuffer mByteBuffer = ByteBuffer.wrap(answer);
             mByteBuffer.order(ByteOrder.LITTLE_ENDIAN);
@@ -538,6 +541,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     //Log.e("MOTION SERVICE FRAGMENT", "COMMAND ANSWER DATA RECEIVED " + string_concat_debug);
                     mTestView.setTextSize(15);
                     mTestView.setText(string_concat_debug);
+                    mTestView.setHeight(400);
                     break;
                 case "RSN":
                     String string_rsn = new String(answer);
